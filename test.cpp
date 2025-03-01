@@ -1,19 +1,20 @@
 #include <stdio.h>
+#include "include/test_suite.h"
 
-#define TEST_FUNCTION(name) bool(name)(void)
-typedef TEST_FUNCTION(test_function);
+//TODO: save the line numbers for specific test functions
+//TODO: be able to call all test functions at once for testing
 
-TEST_FUNCTION(test1)
+
+UNIT()
 {
     printf("test\n");
-    return true;
+    return(true);
 }
 
 int
 main(void)
 {
-    test_function* func = test1;
-    func();
+    test_0();
     printf("Hello World\n");
-    return 0;
+    return(0);
 }
