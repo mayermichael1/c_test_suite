@@ -1,3 +1,3 @@
 #!/bin/bash
 
-bear -- gcc -o bin/out test.cpp
+bear -- gcc -o out/test test.cpp
