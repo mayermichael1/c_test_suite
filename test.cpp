@@ -22,21 +22,12 @@ struct test_unit
     test_function *function;
 };
 
-int
-main(int argc, char **argv)
+void
+load_test_suite (test_unit *unit_data, char *lib_name)
 {
     char function_name[256] = "";
     char line_number_name[256] = "";
-    char path[256] = "";
-    char *lib_name = "";
-    
-    test_unit units[256] = {};
-    int test_index = 0;
-
-    if(argc >= 2)
-    {
-        lib_name = argv[1];
-    }
+    int unit_counter = 0;
 
     void *lib = dlopen(lib_name, RTLD_NOW | RTLD_NODELETE);
 
@@ -45,8 +36,8 @@ main(int argc, char **argv)
         while(true)
         {
             test_unit unit;
-            sprintf(function_name, "test_%i", test_index);
-            sprintf(line_number_name, "ln_test_%i", test_index);
+            sprintf(function_name, "test_%i", unit_counter);
+            sprintf(line_number_name, "ln_test_%i", unit_counter);
 
             unit.function= (test_function*)dlsym(lib, function_name);
             int *line_number = (int*)dlsym(lib, line_number_name);
@@ -58,21 +49,38 @@ main(int argc, char **argv)
 
             if (unit.function != NULL)
             {
-                units[test_index] = unit;
+                unit_data[unit_counter] = unit;
             }
             else
             {
                 break;
             }
 
-            ++test_index;
+            ++unit_counter;
         } 
         dlclose(lib);
     }
+}
 
+int
+main(int argc, char **argv)
+{
+    char path[256] = "";
+    
+    test_unit units[256] = {};
+    int test_index = 0;
 
-    for (int i = 0; i < test_index; ++i)
+    if(argc >= 2)
     {
+        load_test_suite(units, argv[1]);
+    }
+
+    for (int i = 0; i < 256; ++i)
+    {
+        if (units[i].function == NULL)
+        {
+            break;
+        }
         printf("%i: ", units[i].line_number);
         units[i].function();
     }
