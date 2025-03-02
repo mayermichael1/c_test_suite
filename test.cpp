@@ -62,6 +62,20 @@ load_test_suite (test_unit *unit_data, char *lib_name)
     }
 }
 
+void
+run_test_suite(test_unit *unit_data)
+{
+    for (int i = 0; i < 256; ++i)
+    {
+        if (unit_data[i].function == NULL)
+        {
+            break;
+        }
+        printf("%i: ", unit_data[i].line_number);
+        unit_data[i].function();
+    }
+}
+
 int
 main(int argc, char **argv)
 {
@@ -75,16 +89,7 @@ main(int argc, char **argv)
         load_test_suite(units, argv[1]);
     }
 
-    for (int i = 0; i < 256; ++i)
-    {
-        if (units[i].function == NULL)
-        {
-            break;
-        }
-        printf("%i: ", units[i].line_number);
-        units[i].function();
-    }
+    run_test_suite(units);
 
-    printf("Hello World\n");
     return(0);
 }
