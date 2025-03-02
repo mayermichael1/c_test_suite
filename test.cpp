@@ -1,13 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "include/test_suite.h"
 #include <dlfcn.h>
 #include <string.h>
 
-UNIT()
-{
-    printf("test\n");
-    return(true);
-}
+//TODO: re-route stdout to null when running unit test
 
 TEST_FUNCTION(stub)
 {
@@ -21,9 +18,41 @@ struct test_unit
     int line_number;
     test_function *function;
 };
+struct test_unit_node
+{
+    test_unit data;
+    test_unit_node *next;
+};
+
+struct test_unit_list
+{
+    test_unit_node *head;
+    test_unit_node *tail;
+    int count;
+};
 
 void
-load_test_suite (test_unit *unit_data, char *lib_name)
+test_unit_list_append (test_unit_list *unit_data, test_unit data)
+{
+    test_unit_node *node = (test_unit_node*)malloc(sizeof(test_unit_node));
+    node->data = data;
+
+    ++unit_data->count;
+
+    if (unit_data->head == NULL)
+    {
+        unit_data->head = node;
+        unit_data->tail = node;
+    }
+    else
+    {
+        unit_data->tail->next = node;
+        unit_data->tail = node;
+    }
+}
+
+void
+load_test_suite (test_unit_list *list, char *lib_name)
 {
     char function_name[256] = "";
     char line_number_name[256] = "";
@@ -49,7 +78,7 @@ load_test_suite (test_unit *unit_data, char *lib_name)
 
             if (unit.function != NULL)
             {
-                unit_data[unit_counter] = unit;
+                test_unit_list_append(list, unit);
             }
             else
             {
@@ -63,17 +92,29 @@ load_test_suite (test_unit *unit_data, char *lib_name)
 }
 
 void
-run_test_suite(test_unit *unit_data)
+run_test_suite(test_unit_list list)
 {
-    for (int i = 0; i < 256; ++i)
+    test_unit_node *node = list.head;
+    int test_count = 0;
+    int passed_count = 0;
+    while( node != NULL)
     {
-        if (unit_data[i].function == NULL)
+        bool result = node->data.function();
+        printf(
+            "function on line %i:\t %s\n", 
+            node->data.line_number, 
+            (result) ?  "PASSED" : "FAILED"
+        );
+
+        test_count++;
+        if (result)
         {
-            break;
+            passed_count++;
         }
-        printf("%i: ", unit_data[i].line_number);
-        unit_data[i].function();
+
+        node = node->next;
     }
+    printf("%i of %i units PASSED\n", passed_count, test_count);
 }
 
 int
@@ -81,15 +122,15 @@ main(int argc, char **argv)
 {
     char path[256] = "";
     
-    test_unit units[256] = {};
+    test_unit_list list = {};
     int test_index = 0;
 
     if(argc >= 2)
     {
-        load_test_suite(units, argv[1]);
+        load_test_suite(&list, argv[1]);
     }
 
-    run_test_suite(units);
+    run_test_suite(list);
 
     return(0);
 }

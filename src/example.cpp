@@ -24,3 +24,9 @@ UNIT()
     printf("This is test 3\n");
     return false;
 }
+
+UNIT()
+{
+    printf("This is test 4\n");
+    return true;
+}
