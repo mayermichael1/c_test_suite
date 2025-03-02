@@ -3,10 +3,6 @@
 #include <dlfcn.h>
 #include <string.h>
 
-//TODO: save the line numbers for specific test functions
-//TODO: be able to call all test functions at once for testing
-
-
 UNIT()
 {
     printf("test\n");
@@ -25,20 +21,6 @@ struct test_unit
     int line_number;
     test_function *function;
 };
-
-void
-extract_path (char *full_name)
-{
-    for (int i = strlen(full_name) - 1; i > 0; ++i)
-    {
-        if (full_name[i] == '/')
-        {
-            break;
-        }
-        full_name[i] = 0;
-    }
-}
-
 
 int
 main(int argc, char **argv)
