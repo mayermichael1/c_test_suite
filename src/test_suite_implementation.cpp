@@ -97,5 +97,8 @@ run_test_suite(test_unit_list list)
     }
 
     close(null_file);
-    printf("%i of %i units PASSED\n", passed_count, test_count);
+    if (test_count > 0)
+    {
+        printf("%i of %i units PASSED\n", passed_count, test_count);
+    }
 }
