@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "include/test_suite.h"
 #include <dlfcn.h>
+#include <string.h>
 
 //TODO: save the line numbers for specific test functions
 //TODO: be able to call all test functions at once for testing
@@ -25,15 +26,38 @@ struct test_unit
     test_function *function;
 };
 
-int
-main(void)
+void
+extract_path (char *full_name)
 {
-    void *lib = dlopen("./example.so", RTLD_NOW | RTLD_NODELETE);
+    for (int i = strlen(full_name) - 1; i > 0; ++i)
+    {
+        if (full_name[i] == '/')
+        {
+            break;
+        }
+        full_name[i] = 0;
+    }
+}
+
+
+int
+main(int argc, char **argv)
+{
     char function_name[256] = "";
     char line_number_name[256] = "";
+    char path[256] = "";
+    char *lib_name = "";
+    
     test_unit units[256] = {};
-
     int test_index = 0;
+
+    if(argc >= 2)
+    {
+        lib_name = argv[1];
+    }
+
+    void *lib = dlopen(lib_name, RTLD_NOW | RTLD_NODELETE);
+
     if(lib)
     {
         while(true)
