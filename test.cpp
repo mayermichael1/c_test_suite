@@ -1,6 +1,6 @@
 #include "include/test_suite.h"
 
-//TODO: re-route stdout to null when running unit test
+//TODO: re-route stdout to null when running unit test (dup2)
 
 int
 main(int argc, char **argv)
