@@ -6,6 +6,7 @@
 #include <dlfcn.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <stdbool.h>
 
 #define TEST_FUNCTION(name) bool(name)(void)
 typedef TEST_FUNCTION(test_function);

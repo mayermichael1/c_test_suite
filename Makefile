@@ -1,7 +1,7 @@
 OPT=-O0
 DEBUG=-g
 LIBS=
-FLAGS=
+FLAGS=-std=c99
 
 BUILDDIR=./build
 INCLUDEDIRS=-I.
