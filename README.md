@@ -32,3 +32,20 @@ automatically.
 
 ## Test Code
 
+UNIT Tests are supposed to look like this: 
+
+```c
+#include "../lib/c_test_suite/include/test_suite.h"
+
+UNIT()
+{
+    //test code here return success of unit
+    return false;
+}
+
+UNIT()
+{
+    //test code here return success of unit
+    return true;
+}
+```
