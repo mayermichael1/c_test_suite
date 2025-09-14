@@ -1,5 +1,5 @@
 #include "include/test_suite.h"
-#include "src/test_suite_implementation.cpp"
+#include "src/test_suite_implementation.c"
 
 int
 main(int argc, char **argv)

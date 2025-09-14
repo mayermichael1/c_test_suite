@@ -1,4 +1,4 @@
-#include "../include/test_suite.h"
+#include "../lib/c_test_suite/include/test_suite.h"
 #include <stdio.h>
 
 UNIT()
