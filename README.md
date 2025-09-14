@@ -22,7 +22,7 @@ Example structure:
 - lib/
     - test.c
     - src/
-        test_suite_implementation.cpp 
+        test_suite_implementation.c 
     - include/
         test_suite.h
 ```
