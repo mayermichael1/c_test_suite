@@ -12,7 +12,7 @@ INCLUDEDIRS=-I.
 
 .PHONY: test
 test: $(BUILDDIR) testbin
-	gcc $(DEBUG) -o -fpic -shared -o build/example.so src/example.cpp 
+	gcc $(DEBUG) -o -fpic -shared -o build/example.so test/example.cpp 
 	$(BUILDDIR)/testbin $(BUILDDIR)/example.so
 
 .PHONY: testbin
